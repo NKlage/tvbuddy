@@ -1,2 +1,0 @@
-/// Core Controller
-class CoreController {}

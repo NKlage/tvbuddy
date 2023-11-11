@@ -1,3 +1,0 @@
-
-/// CoreRepository
-abstract class CoreRepository {}
