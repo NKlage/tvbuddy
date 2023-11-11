@@ -44,5 +44,7 @@ app.*.map.json
 /android/app/release
 
 .mason
+coverage
+dist
 *.freezed.dart
 
