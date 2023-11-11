@@ -34,6 +34,18 @@ clean:
 
 build-runner:
 	flutter pub run build_runner build --delete-conflicting-outputs
+	make l10n-gen
+
+l10n:
+	flutter gen-l10n --arb-dir lib/features/$(feature)/l10n/arb --template-arb-file $(feature)_de.arb \
+		--output-dir lib/features/$(feature)/l10n --output-localization-file $(feature)_localization.dart \
+		--no-synthetic-package --no-nullable-getter --format --no-suppress-warnings --output-class $(classname) \
+		--required-resource-attributes --untranslated-messages-file=lib/features/$(feature)/l10n/$(feature)_l10n_untranslated.txt
+
+	git add **/$(feature)_localization*.dart
+
+l10n-gen:
+	make l10n feature=core classname=CoreLocalizations
 
 appicon-generate:
 	flutter pub run flutter_launcher_icons:main -f flutter_launcher_icons.yaml
