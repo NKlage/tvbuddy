@@ -1,0 +1,2 @@
+/// CoreDatasource
+abstract class CoreDatasource {}

@@ -1,3 +1,7 @@
+feature:
+	mason make nk_riverpod_feature --feature_name $(name) --local_datasource true --fake_datasource false
+	git add .
+
 run:
 	flutter run
 
