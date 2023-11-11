@@ -9,6 +9,9 @@ void main() {
     // Act
 
     // Assert
-    expect(find.text('Hello World!'), findsOneWidget);
+    expect(
+        find.text(
+            'This product uses the TMDB API but is not endorsed or certified by TMDB.'),
+        findsOneWidget);
   });
 }
