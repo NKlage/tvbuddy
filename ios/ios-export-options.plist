@@ -9,14 +9,13 @@
 		<key>provisioningProfiles</key>
 		<dict>
 			<key>Bundle-Id</key>
-			<string># Your BundleId #</string>
+			<string>de.appbrewery.tvbuddy</string>
 		</dict>
 		<key>signingCertificate</key>
 		<string>Certificate-Added-In-Keychain</string>
 		<key>stripSwiftSymbols</key>
 		<true/>
-		<key>teamID</key>
-		<string># Your TeamId #</string>
+
 
 	</dict>
 </plist>

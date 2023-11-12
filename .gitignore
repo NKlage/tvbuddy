@@ -47,4 +47,6 @@ app.*.map.json
 coverage
 dist
 *.freezed.dart
+*.mocks.dart
+app_config.json
 
