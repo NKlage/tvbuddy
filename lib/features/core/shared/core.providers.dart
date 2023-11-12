@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tvbuddy/features/core/application.dart';
+import 'package:tvbuddy/features/core/domain.dart';
 
 import '../localization.dart';
 import 'locale_observer.dart';
@@ -16,9 +18,20 @@ class CoreProviders {
 
   // Domain
   /// Repository
+  static final Provider<ConfigurationEntity> configuration =
+      Provider((_) => ConfigurationEntity());
 
   // Presentation
   /// Controller
+
+  // Application
+
+  static final Provider<AnalyticService> analyzeService = Provider((ref) {
+    return AnalyticServiceImpl(
+      preferredLocales: [],
+      configuration: ref.read(configuration),
+    );
+  });
 
   /// provider used to access the CoreLocalizations object for the current
   /// locale

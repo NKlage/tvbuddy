@@ -56,16 +56,14 @@ splashscreen-generate:
 build-ios:
 	@echo "Build iOS"
 	make clean
-	rm -rf ios/dist
-	# flutter build ipa --tree-shake-icons --export-options-plist=ios/ios-export-options.plist --analyze-size --suppress-analytics
-	flutter build ipa --obfuscate --split-debug-info=./dist/debug/ --tree-shake-icons --export-options-plist=ios/ios-export-options.plist --suppress-analytics
-	cp build/ios/ipa/app.ipa dist/app.ipa
+	flutter build ipa -t lib/main.dart --dart-define-from-file=app_config.json --obfuscate --split-debug-info=./dist/debug/ --tree-shake-icons --export-options-plist=ios/ios-export-options.plist --suppress-analytics
+	cp build/ios/ipa/tvbuddy.ipa dist/TVBuddy.ipa
 
 build-android-apk:
 	@echo "Build APK's"
 	make clean
 	# flutter build apk --target-platform=android-arm64 --analyze-size
-	flutter build apk --target-platform=android-arm,android-arm64 --obfuscate --split-debug-info=./dist/debug/
+	flutter build apk -t lib/main.dart --dart-define-from-file=app_config.json --target-platform=android-arm,android-arm64 --obfuscate --split-debug-info=./dist/debug/
 	cp build/app/outputs/apk/release/app-release.apk dist/
 	mv dist/app-release.apk dist/app.apk
 
@@ -73,7 +71,7 @@ build-android-appbundle:
 	@echo "Build Store App Bundle"
 	make clean
 	# flutter build appbundle --analyze-size
-	flutter build appbundle --obfuscate --split-debug-info=./dist/debug/
+	flutter build appbundle -t lib/main.dart --dart-define-from-file=app_config.json --obfuscate --split-debug-info=./dist/debug/
 	cp build/app/outputs/bundle/release/app-release.aab dist/
 	mv dist/app-release.aab dist/app.aab
 
