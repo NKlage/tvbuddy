@@ -1,11 +1,13 @@
 import 'package:countly_flutter_np/countly_flutter.dart';
 import 'package:country_codes/country_codes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tvbuddy/features/core/domain.dart' show ConfigurationEntity;
 
 import '../application.dart' show AnalyticService;
+import '../domain.dart' show ConfigurationEntity;
 import '../localization.dart' show CoreLocalizations;
 
+/// [AnalyticService] implementation to track analytics with Countly
 class AnalyticServiceImpl extends AnalyticService {
   /// Initializes the AnalyticService. The service accepts the
   /// [_preferredLocales], which can be obtained from the [PlatformDispatcher].
@@ -37,7 +39,7 @@ class AnalyticServiceImpl extends AnalyticService {
 
   @override
   Future<void> recordError(Object exception, StackTrace stackTrace) async {
-    Countly.recordDartError(exception, stackTrace);
+    await Countly.recordDartError(exception, stackTrace);
   }
 
   /// Record Event
@@ -65,6 +67,7 @@ class AnalyticServiceImpl extends AnalyticService {
     Countly.instance.views.startView(name, segments ?? {});
   }
 
+  /// Log Exception
   void logException({
     required String exception,
     bool nonfatal = false,
@@ -73,6 +76,7 @@ class AnalyticServiceImpl extends AnalyticService {
     Countly.logException(exception, nonfatal, segments ?? {});
   }
 
+  /// log manual exception
   void logExceptionManual({
     required String message,
     bool nonFatal = false,

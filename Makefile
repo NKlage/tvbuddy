@@ -9,10 +9,10 @@ run-release:
 	flutter run --release
 
 format:
-	flutter format . --set-exit-if-changed
+	dart format . --set-exit-if-changed
 
 format-fix:
-	flutter format .
+	dart format .
 
 lint:
 	flutter analyze --fatal-infos --fatal-warnings
@@ -27,14 +27,18 @@ packages-outdated:
 packages-upgrade:
 	flutter pub upgrade
 
+build-runner:
+	dart pub run build_runner build --delete-conflicting-outputs
+	make l10n-gen
+
 clean:
 	flutter clean
 	flutter pub get
 	make build-runner
 
-build-runner:
-	flutter pub run build_runner build --delete-conflicting-outputs
-	make l10n-gen
+
+watch-build-runner:
+	flutter pub run build_runner watch --delete-conflicting-outputs
 
 l10n:
 	flutter gen-l10n --arb-dir lib/features/$(feature)/l10n/arb --template-arb-file $(feature)_de.arb \

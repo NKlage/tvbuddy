@@ -1,0 +1,2 @@
+/// Trending Controller
+class TrendingController {}

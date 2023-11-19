@@ -1,31 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tvbuddy/features/core/application.dart';
-import 'package:tvbuddy/features/core/domain.dart' show ConfigurationEntity;
-import 'package:tvbuddy/features/core/shared.dart';
 
-import 'app_placeholder.dart';
-import 'features/core/localization.dart';
+import 'features/application/presentation.dart' show TvBuddyApp;
+import 'features/application/shared.dart' show ApplicationProviders;
 
 Future<void> main() async {
   final widgetBinding = WidgetsFlutterBinding.ensureInitialized();
-  final analyzeService = AnalyticServiceImpl(
-    preferredLocales: widgetBinding.platformDispatcher.locales,
-    configuration: ConfigurationEntity(),
-  );
-  await analyzeService.init();
+  final preferredLocales = widgetBinding.platformDispatcher.locales;
+  final container = ProviderContainer();
 
-  final container = ProviderContainer(
-    overrides: [
-      CoreProviders.analyzeService.overrideWith(
-        (ref) => analyzeService,
-      ),
-    ],
-  );
+  final initAppService =
+      container.read(ApplicationProviders.initAppService(preferredLocales));
+  await initAppService.init();
 
   FlutterError.onError = (details) {
-    analyzeService.recordError(
+    initAppService.analyticService.recordError(
       details.exception,
       details.stack ?? StackTrace.current,
     );
@@ -34,25 +23,10 @@ Future<void> main() async {
   runApp(
     UncontrolledProviderScope(
       container: container,
-      child: const MainApp(),
+      child: TvBuddyApp(
+        routeConfiguration: initAppService.routeConfiguration,
+        theme: container.read(ApplicationProviders.theme),
+      ),
     ),
   );
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      supportedLocales: CoreLocalizations.supportedLocales,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        CoreLocalizations.delegate,
-      ],
-      home: AppPlaceholder(),
-    );
-  }
 }
