@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../shared.dart' show TrendingProviders;
+import '../presentation.dart';
 
 /// Trending Page
 class TrendingPage extends ConsumerWidget {
@@ -11,22 +11,25 @@ class TrendingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final trendingService = ref.read(TrendingProviders.trendingService);
-
-    trendingService.dailyTvShows(page: 1).then(
-          (value) => debugPrint(
-            value.tvShows.toString(),
-          ),
-        );
-
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: const Text('TV Buddy'),
-        backgroundColor: Colors.transparent,
+        backgroundColor:
+            Colors.transparent, // TODO(nk): add background color to theme
       ),
       body: const SafeArea(
-        child: Center(
-          child: Text('Trending'),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                  height: 250, child: TrendingMovieList(isMovieList: false)),
+              SizedBox(
+                  height: 250, child: TrendingMovieList(isMovieList: true)),
+              Center(
+                child: Text('Trending'),
+              ),
+            ],
+          ),
         ),
       ),
     );

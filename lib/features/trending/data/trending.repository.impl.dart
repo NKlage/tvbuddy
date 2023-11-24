@@ -26,6 +26,22 @@ class TrendingRepositoryImpl implements TrendingRepository {
     final hasNext = tvShows.page < tvShows.totalPages;
     return (hasNext: hasNext, tvShows: tvShows.toEntity());
   }
+
+  @override
+  Future<({bool hasNext, Iterable<TrendingEntity> movies})> getMovies({
+    TimeWindow timeWindow = TimeWindow.day,
+    int page = 1,
+    String? language,
+  }) async {
+    final movies = await _trendingRemoteDatasource.getMovies(
+      timeWindow: timeWindow,
+      page: page,
+      language: language,
+    );
+
+    final hasNext = movies.page < movies.totalPages;
+    return (hasNext: hasNext, movies: movies.toEntity());
+  }
 }
 
 extension _TrendingResponseExtension on TrendingResponse {

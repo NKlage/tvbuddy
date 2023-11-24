@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.1.5 <4.0.0'
 
 dependencies:
+  cached_network_image: ^3.3.0
   countly_flutter_np: ^23.8.4
   country_codes: ^2.2.0
   dio: ^5.3.3

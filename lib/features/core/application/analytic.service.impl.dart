@@ -67,16 +67,16 @@ class AnalyticServiceImpl extends AnalyticService {
     Countly.instance.views.startView(name, segments ?? {});
   }
 
-  /// Log Exception
+  @override
   void logException({
     required String exception,
     bool nonfatal = false,
-    Map<String, Object>? segments,
+    Map<String, Object>? segmentation,
   }) {
-    Countly.logException(exception, nonfatal, segments ?? {});
+    Countly.logException(exception, nonfatal, segmentation ?? {});
   }
 
-  /// log manual exception
+  @override
   void logExceptionManual({
     required String message,
     bool nonFatal = false,

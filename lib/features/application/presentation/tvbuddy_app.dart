@@ -3,7 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/localization.dart';
+import '../../core/localization.dart' show CoreLocalizations;
+import '../../trending/localization.dart' show TrendingLocalizations;
 import 'tv_buddy_theme.dart';
 
 /// App Main Entry Point
@@ -33,6 +34,7 @@ class TvBuddyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
             CoreLocalizations.delegate,
+            TrendingLocalizations.delegate,
           ],
           routerConfig: _routeConfiguration,
         ),

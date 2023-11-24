@@ -15,7 +15,7 @@
 		<string>Certificate-Added-In-Keychain</string>
 		<key>stripSwiftSymbols</key>
 		<true/>
-
-
+		<key>teamID</key>
+		<string>PH2ZEE5U5F</string>
 	</dict>
 </plist>

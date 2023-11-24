@@ -10,4 +10,10 @@ abstract class TrendingRepository {
     int page = 1,
     String? language,
   });
+
+  Future<({bool hasNext, Iterable<TrendingEntity> movies})> getMovies({
+    TimeWindow timeWindow = TimeWindow.day,
+    int page = 1,
+    String? language,
+  });
 }

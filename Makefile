@@ -50,6 +50,7 @@ l10n:
 
 l10n-gen:
 	make l10n feature=core classname=CoreLocalizations
+	make l10n feature=trending classname=TrendingLocalizations
 
 appicon-generate:
 	flutter pub run flutter_launcher_icons:main -f flutter_launcher_icons.yaml

@@ -5,7 +5,12 @@ import '../application.dart' show TrendingService;
 import '../data.dart'
     show TrendingDatasource, TrendingRemoteDatasource, TrendingRepositoryImpl;
 import '../domain.dart' show TrendingRepository;
-import '../presentation.dart' show TrendingController;
+import '../l10n/trending_localization.dart';
+import '../presentation.dart'
+    show
+        TrendingController,
+        TrendingMovieListController,
+        TrendingMovieListControllerState;
 import '../shared.dart' show TrendingRoute;
 
 /// Trending Feature Providers
@@ -13,7 +18,7 @@ class TrendingProviders {
   // Data
 
   /// Trending Remote Datasource
-  static final Provider<TrendingDatasource> trendingRemoteDatasource = Provider(
+  static Provider<TrendingDatasource> trendingRemoteDatasource = Provider(
     (ref) => TrendingRemoteDatasource(
       tmdbClient: ref.read(CoreProviders.tmdbClient),
     ),
@@ -21,7 +26,7 @@ class TrendingProviders {
 
   // Domain
   /// Trending Repository
-  static final Provider<TrendingRepository> trendingRepository = Provider(
+  static Provider<TrendingRepository> trendingRepository = Provider(
     (ref) => TrendingRepositoryImpl(
       trendingRemoteDatasource: ref.read(trendingRemoteDatasource),
     ),
@@ -29,7 +34,7 @@ class TrendingProviders {
 
   // Application
   /// TMDB Trending Service Provider
-  static final Provider<TrendingService> trendingService = Provider(
+  static Provider<TrendingService> trendingService = Provider(
     (ref) => TrendingService(
       trendingRepository: ref.read(trendingRepository),
     ),
@@ -37,8 +42,24 @@ class TrendingProviders {
 
   // Presentation
   /// TrendingController
-  static final Provider<TrendingController> trendingController =
+  static Provider<TrendingController> trendingController =
       Provider((ref) => TrendingController());
+
+  /// TrendingMovieListController Provider
+  static AutoDisposeStateNotifierProvider<TrendingMovieListController,
+          TrendingMovieListControllerState> trendingMovieListController =
+      StateNotifierProvider.autoDispose<TrendingMovieListController,
+          TrendingMovieListControllerState>((ref) {
+    return TrendingMovieListController(
+      state: const TrendingMovieListControllerState(),
+      trendingService: ref.read(trendingService),
+      analyticService: ref.read(
+        CoreProviders.analyzeService(
+          TrendingLocalizations.supportedLocales,
+        ),
+      ),
+    );
+  });
 
   // Shared
   /// Trending Feature Route Configuration

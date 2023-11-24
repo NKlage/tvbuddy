@@ -8,7 +8,11 @@ abstract class TrendingDatasource {
   Future<void> getPeople();
 
   /// get trending movielist
-  Future<void> getMovies();
+  Future<TrendingResponse> getMovies({
+    TimeWindow timeWindow = TimeWindow.day,
+    int page = 1,
+    String? language,
+  });
 
   /// get trending tv list
   Future<TrendingResponse> getTv({

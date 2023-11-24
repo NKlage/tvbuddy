@@ -31,4 +31,14 @@ class TrendingService {
       timeWindow: TimeWindow.week,
     );
   }
+
+  /// Get daily Trending movies
+  Future<({bool hasNext, Iterable<TrendingEntity> movies})> dailyMovies({
+    required int page,
+  }) async {
+    return _trendingRepository.getMovies(
+      page: page,
+      language: _locale,
+    );
+  }
 }
