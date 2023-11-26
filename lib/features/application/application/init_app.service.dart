@@ -31,7 +31,7 @@ class InitAppService {
     await _loggingService.init(
       logLevel: LogLevel.debug,
     ); // TODO(nk): get log level from configuration
-    // await _analyticService.init();
+    await _analyticService.init();
     _routeService.init();
     _routeConfiguration = _routeService.routeConfiguration;
   }

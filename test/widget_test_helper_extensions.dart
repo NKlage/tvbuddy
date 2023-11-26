@@ -8,11 +8,15 @@ import 'package:tvbuddy/features/application/presentation/tv_buddy_theme.dart';
 import 'package:tvbuddy/features/trending/shared.dart' show TrendingRoute;
 
 extension WidgetTestHelperExtensions on WidgetTester {
-  Future<void> pumpTvBuddyApp({GoRouter? routeConfiguration}) async {
+  Future<void> pumpTvBuddyApp({
+    GoRouter? routeConfiguration,
+    List<Override>? overrides,
+  }) async {
     TestWidgetsFlutterBinding.ensureInitialized();
     final defaultRouteConfiguration = RouteService([TrendingRoute()])..init();
     return pumpWidget(
       ProviderScope(
+        overrides: overrides ?? [],
         child: TvBuddyApp(
           routeConfiguration: routeConfiguration ??
               defaultRouteConfiguration.routeConfiguration,

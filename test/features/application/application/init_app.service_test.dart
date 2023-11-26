@@ -5,6 +5,7 @@ import 'package:tvbuddy/features/application/application.dart'
     show InitAppService, RouteService;
 import 'package:tvbuddy/features/core/application.dart'
     show AnalyticService, LoggingService;
+import 'package:tvbuddy/features/core/shared.dart' show LogLevel;
 
 import 'init_app.service_test.mocks.dart';
 
@@ -30,6 +31,6 @@ void main() {
     // Assert
     verify(mockAnalyticService.init()).called(1);
     verify(mockRouteService.init()).called(1);
-    verify(mockLoggingService.init()).called(1);
+    verify(mockLoggingService.init(logLevel: LogLevel.debug)).called(1);
   });
 }

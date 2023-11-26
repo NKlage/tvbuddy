@@ -60,6 +60,7 @@ Future<void> main() async {
   );
 
   final container = ProviderContainer(
+    overrides: [],
     observers: [
       riverpodObserver,
     ],

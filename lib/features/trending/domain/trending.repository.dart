@@ -11,6 +11,7 @@ abstract class TrendingRepository {
     String? language,
   });
 
+  /// Get trending movies
   Future<({bool hasNext, Iterable<TrendingEntity> movies})> getMovies({
     TimeWindow timeWindow = TimeWindow.day,
     int page = 1,

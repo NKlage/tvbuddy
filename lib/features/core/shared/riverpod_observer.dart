@@ -1,16 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Riverpod Observer typedef for did add provider
 typedef RiverpodObserverDidAddProviderLog = void Function(
   ProviderBase<Object?> provider,
   Object? value,
   ProviderContainer container,
 );
 
+/// Riverpod Observer typedef for did dispose provider
 typedef RiverpodObserverDidDisposeProviderLog = void Function(
   ProviderBase<Object?> provider,
   ProviderContainer container,
 );
 
+/// Riverpod Observer typedef for did update provider
 typedef RiverpodObserverDidUpdateProvider = void Function(
   ProviderBase<Object?> provider,
   Object? previousValue,
@@ -18,6 +21,7 @@ typedef RiverpodObserverDidUpdateProvider = void Function(
   ProviderContainer container,
 );
 
+/// Riverpod Observer typedef for provider did fail
 typedef RiverpodObserverProviderDidFail = void Function(
   ProviderBase<Object?> provider,
   Object? error,
