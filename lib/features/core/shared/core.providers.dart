@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tvbuddy/features/core/application.dart';
-import 'package:tvbuddy/features/core/domain.dart';
 
+import '../application.dart';
+import '../domain.dart';
 import '../localization.dart';
 import 'locale_observer.dart';
 

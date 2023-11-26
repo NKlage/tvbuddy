@@ -10,8 +10,10 @@ void main() {
 
     // Assert
     expect(
-        find.text(
-            'This product uses the TMDB API but is not endorsed or certified by TMDB.'),
-        findsOneWidget);
+      find.text(
+          'This product uses the TMDB API but is not endorsed or certified by '
+          'TMDB.'),
+      findsOneWidget,
+    );
   });
 }
