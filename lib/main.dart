@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tvbuddy/features/core/application.dart';
-import 'package:tvbuddy/features/core/domain.dart' show ConfigurationEntity;
-import 'package:tvbuddy/features/core/shared.dart';
 
 import 'app_placeholder.dart';
+import 'features/core/application.dart';
+import 'features/core/domain.dart' show ConfigurationEntity;
 import 'features/core/localization.dart';
+import 'features/core/shared.dart';
 
 Future<void> main() async {
   final widgetBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +39,9 @@ Future<void> main() async {
   );
 }
 
+/// Main App
 class MainApp extends StatelessWidget {
+  /// Default Constructor
   const MainApp({super.key});
 
   @override

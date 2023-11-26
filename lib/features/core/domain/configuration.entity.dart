@@ -1,4 +1,6 @@
+/// Configuration Entity
 class ConfigurationEntity {
+  /// Default Constructor
   ConfigurationEntity() {
     _countlyUrl = const String.fromEnvironment('countly_url');
     _countlyAppKey = const String.fromEnvironment('countly_app_key');

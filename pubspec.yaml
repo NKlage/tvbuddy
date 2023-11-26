@@ -7,20 +7,20 @@ environment:
   sdk: '>=3.1.5 <4.0.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
-  flutter_riverpod: ^2.4.5
-  flutter_localizations:
-    sdk: flutter
-  intl: any
   countly_flutter_np: ^23.8.4
   country_codes: ^2.2.0
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.4.5
+  intl: any
 
 dev_dependencies:
+  build_runner: ^2.4.6
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  build_runner: ^2.4.6
   mockito: ^5.4.2
 
 flutter:
