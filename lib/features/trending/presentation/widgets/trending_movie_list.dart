@@ -2,15 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 
 import '../../../core/presentation.dart' show UseProviderOnInit;
 import '../../domain.dart' show TrendingEntity;
+import '../../presentation.dart';
 import '../../shared.dart' show TrendingProviders;
 import '../../shared/localized_build_context.dart';
-import 'trending_movie_list.controller.dart';
 
 /// Trending Movie / TV List
-class TrendingMovieList extends StatelessWidget {
+class TrendingMovieList extends ConsumerWidget {
   /// Default Constructor
   const TrendingMovieList({required bool isMovieList, super.key})
       : _isMovieList = isMovieList;
@@ -18,14 +19,37 @@ class TrendingMovieList extends StatelessWidget {
   final bool _isMovieList;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timeWindow = ref.watch(
+      TrendingProviders.trendingMovieListController
+          .select((value) => value.timeWindow),
+    );
+
+    final textTheme = Theme.of(context).textTheme;
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(
-            context.trendingLocalizations.trendingShowsTitle,
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                context.trendingLocalizations.trendingShowsTitle,
+                style:
+                    textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              TimeWindowButton(
+                currentTimeWindow: timeWindow,
+                onTap: ref
+                    .read(
+                      TrendingProviders.trendingMovieListController.notifier,
+                    )
+                    .toogleTimeWindow,
+              ),
+            ],
           ),
         ),
         Expanded(
@@ -50,6 +74,7 @@ class _MovieList extends ConsumerStatefulWidget {
 class _MovieListState extends ConsumerState<_MovieList> with UseProviderOnInit {
   final ScrollController _scrollController = ScrollController();
   late TrendingMovieListController trendingMovieListController;
+  ProviderSubscription<TrendingMovieListControllerState>? _stateSubscription;
 
   @override
   void initState() {
@@ -65,12 +90,20 @@ class _MovieListState extends ConsumerState<_MovieList> with UseProviderOnInit {
     trendingMovieListController = ref.read(
       TrendingProviders.trendingMovieListController.notifier,
     );
+    useOnInit(() => trendingMovieListController.getTvShows());
 
-    if (!widget.showMovieList) {
-      useOnInit(() => trendingMovieListController.getDailyShows());
-    } else {
-      useOnInit(() => trendingMovieListController.getDailyMovies());
-    }
+    _stateSubscription = ref.listenManual(
+      TrendingProviders.trendingMovieListController,
+      (
+        TrendingMovieListControllerState? previous,
+        TrendingMovieListControllerState? next,
+      ) {
+        if (previous?.timeWindow != next?.timeWindow &&
+            0 < _scrollController.position.pixels) {
+          _scrollController.jumpTo(0);
+        }
+      },
+    );
   }
 
   Future<void> _loadNext() async {
@@ -80,7 +113,7 @@ class _MovieListState extends ConsumerState<_MovieList> with UseProviderOnInit {
       return;
     }
 
-    await trendingMovieListController.getDailyShows(
+    await trendingMovieListController.getTvShows(
       page: state.currentPage + 1,
     );
   }
@@ -135,12 +168,11 @@ class _MovieListState extends ConsumerState<_MovieList> with UseProviderOnInit {
             PlatformTextButton(
               child: Text(context.trendingLocalizations.reloadActionText),
               onPressed: () async {
-                // TODO(nk): prüfen ob Serien oder Filme angezeigt werden sollen und
-                // die entsprechende Methode aufrufen. !!! TimeWindow beachten
                 await ref
                     .read(
-                        TrendingProviders.trendingMovieListController.notifier)
-                    .getDailyShows();
+                      TrendingProviders.trendingMovieListController.notifier,
+                    )
+                    .getTvShows();
               },
             ),
           ],
@@ -152,6 +184,7 @@ class _MovieListState extends ConsumerState<_MovieList> with UseProviderOnInit {
 
   @override
   void dispose() {
+    _stateSubscription?.close();
     _scrollController.dispose();
     super.dispose();
   }
@@ -230,6 +263,92 @@ class _MovieListItem extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Switch TMDB TimeWindow Button
+class TimeWindowButton extends StatelessWidget {
+  /// Default Constructor
+  const TimeWindowButton({
+    required TimeWindow currentTimeWindow,
+    void Function()? onTap,
+    super.key,
+  })  : _onTap = onTap,
+        _currentTimeWindow = currentTimeWindow;
+
+  final TimeWindow _currentTimeWindow;
+  final VoidCallback? _onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(25),
+          ),
+          border: Border.all(
+            color: Colors.grey,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _getButton(text: 'Day', timeWindow: TimeWindow.day),
+            _getButton(text: 'Week', timeWindow: TimeWindow.week),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _getButton({required String text, required TimeWindow timeWindow}) {
+    final widget = Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        child: Text(text),
+      ),
+    );
+
+    const circularRadius = Radius.circular(24);
+
+    final box = BoxDecoration(
+      borderRadius: BorderRadius.only(
+        topRight: _currentTimeWindow == TimeWindow.week
+            ? circularRadius
+            : Radius.zero,
+        bottomRight: _currentTimeWindow == TimeWindow.week
+            ? circularRadius
+            : Radius.zero,
+        topLeft:
+            _currentTimeWindow == TimeWindow.day ? circularRadius : Radius.zero,
+        bottomLeft:
+            _currentTimeWindow == TimeWindow.day ? circularRadius : Radius.zero,
+      ),
+      border: Border.all(
+        color:
+            _currentTimeWindow == timeWindow ? Colors.grey : Colors.transparent,
+      ),
+      color:
+          _currentTimeWindow == timeWindow ? Colors.green : Colors.transparent,
+    );
+
+    return GestureDetector(
+      onTap: _onTap,
+      child: FractionallySizedBox(
+        heightFactor: 1,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 50,
+          ),
+          child: DecoratedBox(
+            decoration: box,
+            child: widget,
           ),
         ),
       ),

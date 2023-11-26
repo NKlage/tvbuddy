@@ -22,11 +22,8 @@ class TrendingPage extends ConsumerWidget {
           child: Column(
             children: [
               SizedBox(
-                  height: 250, child: TrendingMovieList(isMovieList: false)),
-              SizedBox(
-                  height: 250, child: TrendingMovieList(isMovieList: true)),
-              Center(
-                child: Text('Trending'),
+                height: 250,
+                child: TrendingMovieList(isMovieList: false),
               ),
             ],
           ),

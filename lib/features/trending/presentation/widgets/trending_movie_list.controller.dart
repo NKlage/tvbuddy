@@ -2,12 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tmdb_api/tmdb_api.dart' show TimeWindow;
 
 import '../../../core/application.dart' show AnalyticService;
+import '../../../core/shared.dart';
 import '../../application.dart' show TrendingService;
+import '../../domain.dart';
 import '../../presentation.dart';
 
 /// Controller for the [TrendingMovieList]
 class TrendingMovieListController
-    extends StateNotifier<TrendingMovieListControllerState> {
+    extends StateNotifier<TrendingMovieListControllerState>
+    with PresentationLogger {
   /// Default Constructor
   TrendingMovieListController({
     required TrendingMovieListControllerState state,
@@ -21,12 +24,21 @@ class TrendingMovieListController
   final AnalyticService _analyticService;
 
   /// Get daily trending tv shows
-  Future<void> getDailyShows({int page = 1}) async {
+  Future<void> getTvShows({int page = 1}) async {
     try {
-      final oldData = state.tvOrMovies.valueOrNull ?? [];
-      final tvShows = await _trendingService.dailyTvShows(page: page);
+      Iterable<TrendingEntity> oldData = [];
+
+      if (1 < page) {
+        oldData = state.tvOrMovies.valueOrNull ?? [];
+      }
+
+      final getShows = TimeWindow.week == state.timeWindow
+          ? _trendingService.weeklyTvShows(page: page)
+          : _trendingService.dailyTvShows(page: page);
+
+      final tvShows = await getShows;
       state = state.copyWith(
-        timeWindow: TimeWindow.day,
+        timeWindow: state.timeWindow,
         hasNext: tvShows.hasNext,
         currentPage: page,
         tvOrMovies: AsyncData([
@@ -34,46 +46,25 @@ class TrendingMovieListController
           ...tvShows.tvShows,
         ]),
       );
-    } catch (e) {
+    } catch (e, stack) {
+      loggy.error(e, stack);
       _analyticService.logExceptionManual(
         message: e.toString(),
         nonFatal: true,
-        stackTrace: StackTrace.current,
+        stackTrace: stack,
         segmentation: {'TrendingMovieListController': 'getDailyShows'},
       );
       state = state.copyWith(tvOrMovies: AsyncError(e, StackTrace.empty));
     }
   }
 
-  /// get weekly trending tv shows
-  Future<void> getWeeklyShows({int page = 1}) async {
-    try {
-      final tvShows = await _trendingService.weeklyTvShows(page: page);
-    } catch (e) {}
-  }
+  /// Toggle TV List TimeWindow
+  Future<void> toogleTimeWindow() async {
+    final newTimeWindow =
+        TimeWindow.day == state.timeWindow ? TimeWindow.week : TimeWindow.day;
 
-  /// get daily trending movies
-  Future<void> getDailyMovies({int page = 1}) async {
-    try {
-      final oldData = state.tvOrMovies.valueOrNull ?? [];
-      final tvShows = await _trendingService.dailyMovies(page: page);
-      state = state.copyWith(
-        timeWindow: TimeWindow.day,
-        hasNext: tvShows.hasNext,
-        currentPage: page,
-        tvOrMovies: AsyncData([
-          ...oldData,
-          ...tvShows.movies,
-        ]),
-      );
-    } catch (e) {
-      _analyticService.logExceptionManual(
-        message: e.toString(),
-        nonFatal: true,
-        stackTrace: StackTrace.current,
-        segmentation: {'TrendingMovieListController': 'getDailyShows'},
-      );
-      state = state.copyWith(tvOrMovies: AsyncError(e, StackTrace.empty));
-    }
+    state = state.copyWith(timeWindow: newTimeWindow);
+
+    await getTvShows();
   }
 }

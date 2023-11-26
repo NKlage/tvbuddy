@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/application.dart';
 import '../../core/shared.dart' show CoreProviders;
 import '../../trending/shared.dart' show TrendingProviders;
 import '../application.dart' show InitAppService, RouteService;
@@ -33,12 +34,19 @@ class ApplicationProviders {
     ),
   );
 
+  /// LoggingService Provider
+  static final Provider<LoggingService> loggingService =
+      Provider<LoggingService>(
+    (ref) => LoggingServiceImpl(),
+  );
+
   /// InitAppService Provider
   static final ProviderFamily<InitAppService, List<Locale>> initAppService =
       Provider.family<InitAppService, List<Locale>>(
     (ref, locales) => InitAppService(
       analyticService: ref.read(CoreProviders.analyzeService(locales)),
       routeService: ref.read(initRouteService),
+      loggingService: ref.read(loggingService),
     ),
   );
 }

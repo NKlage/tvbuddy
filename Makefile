@@ -28,13 +28,14 @@ packages-upgrade:
 	flutter pub upgrade
 
 build-runner:
-	dart pub run build_runner build --delete-conflicting-outputs
+	dart run build_runner build --delete-conflicting-outputs
 	make l10n-gen
 
 clean:
 	flutter clean
 	flutter pub get
 	make build-runner
+	make l10n-gen
 
 
 watch-build-runner:
@@ -61,7 +62,7 @@ splashscreen-generate:
 build-ios:
 	@echo "Build iOS"
 	make clean
-	flutter build ipa -t lib/main.dart --dart-define-from-file=app_config.json --obfuscate --split-debug-info=./dist/debug/ --tree-shake-icons --export-options-plist=ios/ios-export-options.plist --suppress-analytics
+	flutter build ipa -t lib/main.dart --dart-define-from-file=app_config.json --obfuscate --split-debug-info=./dist/debug/ --tree-shake-icons --export-method development --suppress-analytics
 	cp build/ios/ipa/tvbuddy.ipa dist/TVBuddy.ipa
 
 build-android-apk:

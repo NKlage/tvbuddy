@@ -19,9 +19,10 @@ class TvBuddyTheme {
   ThemeData get materialDarkTheme => _materialDarkTheme;
 
   void _createCupertinoDarkTheme() {
-    final darkTheme = ThemeData.dark();
+    var darkTheme = ThemeData.dark();
     const darkDefaultCupertinoTheme =
         CupertinoThemeData(brightness: Brightness.dark);
+
     _cupertinoDarkTheme = MaterialBasedCupertinoThemeData(
       materialTheme: darkTheme.copyWith(
         cupertinoOverrideTheme: CupertinoThemeData(

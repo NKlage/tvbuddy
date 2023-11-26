@@ -20,6 +20,13 @@ class CoreProviders {
     final dio = Dio(
       BaseOptions(receiveDataWhenStatusError: true),
     );
+    // ..interceptors.add(
+    //     LoggyDioInterceptor(
+    //       requestLevel: LogLevel.error,
+    //       responseLevel: LogLevel.error,
+    //       errorLevel: LogLevel.debug,
+    //     ),
+    //   );
 
     return TMDB(ApiKeys(config.tmdbApiKey, 'apiReadAccessTokenv4'), dio: dio);
   });
