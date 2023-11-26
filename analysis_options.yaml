@@ -16,6 +16,7 @@ analyzer:
     - lib/generated_plugin_registrant.dart
     - lib/**/l10n/**
     - lib/**/*.g.dart
+    - test/**/*.mocks.dart
 
 linter:
   rules:
