@@ -9,10 +9,10 @@ run-release:
 	flutter run --release
 
 format:
-	flutter format . --set-exit-if-changed
+	dart format . --set-exit-if-changed
 
 format-fix:
-	flutter format .
+	dart format .
 
 lint:
 	flutter analyze --fatal-infos --fatal-warnings
@@ -27,14 +27,19 @@ packages-outdated:
 packages-upgrade:
 	flutter pub upgrade
 
+build-runner:
+	dart run build_runner build --delete-conflicting-outputs
+	make l10n-gen
+
 clean:
 	flutter clean
 	flutter pub get
 	make build-runner
-
-build-runner:
-	flutter pub run build_runner build --delete-conflicting-outputs
 	make l10n-gen
+
+
+watch-build-runner:
+	flutter pub run build_runner watch --delete-conflicting-outputs
 
 l10n:
 	flutter gen-l10n --arb-dir lib/features/$(feature)/l10n/arb --template-arb-file $(feature)_de.arb \
@@ -46,6 +51,7 @@ l10n:
 
 l10n-gen:
 	make l10n feature=core classname=CoreLocalizations
+	make l10n feature=trending classname=TrendingLocalizations
 
 appicon-generate:
 	flutter pub run flutter_launcher_icons:main -f flutter_launcher_icons.yaml
@@ -56,7 +62,7 @@ splashscreen-generate:
 build-ios:
 	@echo "Build iOS"
 	make clean
-	flutter build ipa -t lib/main.dart --dart-define-from-file=app_config.json --obfuscate --split-debug-info=./dist/debug/ --tree-shake-icons --export-options-plist=ios/ios-export-options.plist --suppress-analytics
+	flutter build ipa -t lib/main.dart --dart-define-from-file=app_config.json --obfuscate --split-debug-info=./dist/debug/ --tree-shake-icons --export-method development --suppress-analytics
 	cp build/ios/ipa/tvbuddy.ipa dist/TVBuddy.ipa
 
 build-android-apk:

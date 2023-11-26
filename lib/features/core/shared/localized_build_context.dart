@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 import '../localization.dart' show CoreLocalizations;
 
-/// BuildContext extension
+/// extends the [BuildContext] to get feature localizations
 extension LocalizedBuildContext on BuildContext {
-  /// Get Core Localizations
+  /// get corefFeature localizations
   CoreLocalizations get coreLocalizations => CoreLocalizations.of(this);
 }

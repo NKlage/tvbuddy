@@ -1,6 +1,6 @@
-/// Configuration Entity
+/// Represents App Configuration Properties
 class ConfigurationEntity {
-  /// Default Constructor
+  /// Defualt Constructor, create Configuration from Environment variables
   ConfigurationEntity() {
     _countlyUrl = const String.fromEnvironment('countly_url');
     _countlyAppKey = const String.fromEnvironment('countly_app_key');

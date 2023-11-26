@@ -1,15 +1,16 @@
 import 'package:countly_flutter_np/countly_flutter.dart';
 import 'package:country_codes/country_codes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../application.dart' show AnalyticService;
 import '../domain.dart' show ConfigurationEntity;
 import '../localization.dart' show CoreLocalizations;
 
-///
+/// [AnalyticService] implementation to track analytics with Countly
 class AnalyticServiceImpl extends AnalyticService {
   /// Initializes the AnalyticService. The service accepts the
-  /// [_preferredLocales], which can be obtained from the PlatformDispatcher.
+  /// [_preferredLocales], which can be obtained from the [PlatformDispatcher].
   ///
   /// ```dart
   /// final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ class AnalyticServiceImpl extends AnalyticService {
 
   @override
   Future<void> recordError(Object exception, StackTrace stackTrace) async {
-    return Countly.recordDartError(exception, stackTrace);
+    await Countly.recordDartError(exception, stackTrace);
   }
 
   /// Record Event
@@ -66,16 +67,16 @@ class AnalyticServiceImpl extends AnalyticService {
     Countly.instance.views.startView(name, segments ?? {});
   }
 
-  /// Log Exception
+  @override
   void logException({
     required String exception,
     bool nonfatal = false,
-    Map<String, Object>? segments,
+    Map<String, Object>? segmentation,
   }) {
-    Countly.logException(exception, nonfatal, segments ?? {});
+    Countly.logException(exception, nonfatal, segmentation ?? {});
   }
 
-  /// Log Exception
+  @override
   void logExceptionManual({
     required String message,
     bool nonFatal = false,

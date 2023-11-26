@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 
 import '../application.dart';
 import '../domain.dart';
@@ -12,12 +14,29 @@ import 'locale_observer.dart';
 class CoreProviders {
   // Data
 
+  /// TMDB API Client
+  static final Provider<TMDB> tmdbClient = Provider((ref) {
+    final config = ref.read(configuration);
+    final dio = Dio(
+      BaseOptions(receiveDataWhenStatusError: true),
+    );
+    // ..interceptors.add(
+    //     LoggyDioInterceptor(
+    //       requestLevel: LogLevel.error,
+    //       responseLevel: LogLevel.error,
+    //       errorLevel: LogLevel.debug,
+    //     ),
+    //   );
+
+    return TMDB(ApiKeys(config.tmdbApiKey, 'apiReadAccessTokenv4'), dio: dio);
+  });
+
   /// Local Datasource
 
   /// Remote Datasource
 
   // Domain
-  /// Repository
+  /// Configuration Provider
   static final Provider<ConfigurationEntity> configuration =
       Provider((_) => ConfigurationEntity());
 
@@ -26,9 +45,11 @@ class CoreProviders {
 
   // Application
 
-  static final Provider<AnalyticService> analyzeService = Provider((ref) {
+  /// Analyze Service Provider
+  static final ProviderFamily<AnalyticService, List<Locale>> analyzeService =
+      Provider.family((ref, locales) {
     return AnalyticServiceImpl(
-      preferredLocales: [],
+      preferredLocales: locales,
       configuration: ref.read(configuration),
     );
   });

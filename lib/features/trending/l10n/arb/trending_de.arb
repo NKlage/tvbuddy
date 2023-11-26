@@ -1,0 +1,20 @@
+{
+  "@@locale": "de",
+
+  "trendingShowsTitle": "Serien Trends",
+  "@trendingShowsTitle": {
+    "description": "Trending TV List title"
+  },
+  "trendingMoviesTitle": "Film Trends",
+  "@trendingMoviesTitle": {
+    "description": "trending Movie List title"
+  },
+  "movieListError": "Mir ist da ein Fehler unterlaufen...",
+  "@movieListError": {
+    "description": "Allgemeiner Fehler wenn beim Laden der MovieListe ein Fehler aufgetreten ist."
+  },
+  "reloadActionText": "Erneut versuchen",
+  "@reloadActionText": {
+    "description": "Text für den Button um nach einem Fehler die Aktion erneut dur den Nutzer zu starten."
+  }
+}

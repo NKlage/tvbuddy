@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+
+  "trendingShowsTitle": "Trending TV",
+  "@trendingShowsTitle": {
+    "description": "Trending TV List title"
+  },
+  "trendingMoviesTitle": "Trending Movies",
+  "@trendingMoviesTitle": {
+    "description": "trending Movie List title"
+  },
+  "movieListError": "I made a mistake...",
+  "@movieListError": {
+    "description": "General error if an error occurred when loading the MovieList."
+  },
+  "reloadActionText": "Try again",
+  "@reloadActionText": {
+    "description": "Text for the button to restart the action for the user after an error."
+  }
+}

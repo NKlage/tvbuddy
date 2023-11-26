@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'core_localization_de.dart';
+import 'core_localization_en.dart';
 
 /// Callers can lookup localized strings with an instance of CoreLocalizations
 /// returned by `CoreLocalizations.of(context)`.
@@ -90,7 +91,10 @@ abstract class CoreLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('de')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
+    Locale('en')
+  ];
 
   /// TMDB Attribution in original Sprache
   ///
@@ -111,7 +115,7 @@ class _CoreLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['de'].contains(locale.languageCode);
+      <String>['de', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_CoreLocalizationsDelegate old) => false;
@@ -122,6 +126,8 @@ CoreLocalizations lookupCoreLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'de':
       return CoreLocalizationsDe();
+    case 'en':
+      return CoreLocalizationsEn();
   }
 
   throw FlutterError(

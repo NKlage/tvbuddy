@@ -1,60 +1,98 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:ui';
 
-import 'app_placeholder.dart';
-import 'features/core/application.dart';
-import 'features/core/domain.dart' show ConfigurationEntity;
-import 'features/core/localization.dart';
-import 'features/core/shared.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loggy/loggy.dart';
+
+import 'features/application/presentation.dart' show TvBuddyApp;
+import 'features/application/shared.dart' show ApplicationProviders;
+import 'features/core/shared/riverpod_observer.dart';
 
 Future<void> main() async {
   final widgetBinding = WidgetsFlutterBinding.ensureInitialized();
-  final analyzeService = AnalyticServiceImpl(
-    preferredLocales: widgetBinding.platformDispatcher.locales,
-    configuration: ConfigurationEntity(),
+  final preferredLocales = widgetBinding.platformDispatcher.locales;
+
+  void providerDidFailLog(
+    ProviderBase<Object?> provider,
+    Object? error,
+    StackTrace stackTrace,
+    ProviderContainer container,
+  ) =>
+      Loggy('RiverpodObserver providerDidFailLog').error(
+        'Provider: $provider - Container: $container',
+        error,
+        stackTrace,
+      );
+
+  void didAddProviderLog(
+    ProviderBase<Object?> provider,
+    Object? value,
+    ProviderContainer container,
+  ) =>
+      Loggy('RiverpodObserver didAddProviderLog').debug(
+        'Container: ${container.runtimeType} - Value: ${value.runtimeType}',
+      );
+
+  void didDisposeProviderLog(
+    ProviderBase<Object?> provider,
+    ProviderContainer container,
+  ) =>
+      Loggy('RiverpodObserver didDisposeProviderLog')
+          .debug('Provider: $provider - Container: $container');
+
+  void didUpdateProviderLog(
+    ProviderBase<Object?> provider,
+    Object? previousValue,
+    Object? newValue,
+    ProviderContainer container,
+  ) {
+    Loggy('RiverpodObserver didUpdateProvider').debug(
+      'Provider: $provider - PreviousValue: $previousValue - '
+      'NewValue: $newValue - Container: $container',
+    );
+  }
+
+  final riverpodObserver = RiverpodObserver(
+    didAddProviderLog: didAddProviderLog,
+    providerDidFailLog: providerDidFailLog,
+    didDisposeProviderLog: didDisposeProviderLog,
+    didUpdateProviderLog: didUpdateProviderLog,
   );
-  await analyzeService.init();
 
   final container = ProviderContainer(
-    overrides: [
-      CoreProviders.analyzeService.overrideWith(
-        (ref) => analyzeService,
-      ),
+    overrides: [],
+    observers: [
+      riverpodObserver,
     ],
   );
 
+  final initAppService =
+      container.read(ApplicationProviders.initAppService(preferredLocales));
+  await initAppService.init();
+
   FlutterError.onError = (details) {
-    analyzeService.recordError(
+    initAppService.analyticService.recordError(
       details.exception,
       details.stack ?? StackTrace.current,
     );
   };
 
+  PlatformDispatcher.instance.onError = (error, stack) {
+    initAppService.analyticService.logException(
+      exception: error.toString(),
+      nonfatal: true,
+      segmentation: {'type': 'PlatformDispatcher Error'},
+    );
+    return true;
+  };
+
   runApp(
     UncontrolledProviderScope(
       container: container,
-      child: const MainApp(),
+      child: TvBuddyApp(
+        routeConfiguration: initAppService.routeConfiguration,
+        theme: container.read(ApplicationProviders.theme),
+      ),
     ),
   );
-}
-
-/// Main App
-class MainApp extends StatelessWidget {
-  /// Default Constructor
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      supportedLocales: CoreLocalizations.supportedLocales,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        CoreLocalizations.delegate,
-      ],
-      home: AppPlaceholder(),
-    );
-  }
 }
