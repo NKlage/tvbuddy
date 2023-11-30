@@ -28,7 +28,7 @@ jobs:
         with:
           flutter-version: "3.16.1"
           channel: 'stable'
-          cache: true
+          cache: false
 
       - name: flutter doctor
         run: flutter doctor -v
