@@ -30,6 +30,9 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: flutter doctor
+        run: flutter doctor -v
+
       - name: Install dependencies
         run: flutter pub get
 
