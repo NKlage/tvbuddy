@@ -16,5 +16,13 @@
   "reloadActionText": "Erneut versuchen",
   "@reloadActionText": {
     "description": "Text für den Button um nach einem Fehler die Aktion erneut dur den Nutzer zu starten."
+  },
+  "trendingDatasourceApiException": "Es ist ein Fehler beim Abrufen der Daten aus der TMDB aufgetreten.",
+  "@trendingDatasourceApiException": {
+    "description": "Fehlermeldung wenn der TMDB API Call einen Fehler verursacht hat."
+  },
+  "trendingDatasourceResponseMappingException": "Es ist ein Fehler beim verarbeiten der TMDB Antwort aufgetreten.",
+  "@trendingDatasourceResponseMappingException": {
+    "description": "Fehlermeldung wenn die TMDB Antwort nicht korrekt verarbeitet werden konnte."
   }
 }
