@@ -28,10 +28,10 @@ jobs:
         with:
           flutter-version: "3.16.1"
           channel: 'stable'
-          cache: false
+          cache: true
 
       - name: Install dependencies
-        run: make clean
+        run: make clean ci=yes
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       # - name: Verify formatting
