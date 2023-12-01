@@ -46,8 +46,9 @@ l10n:
 		--output-dir lib/features/$(feature)/l10n --output-localization-file $(feature)_localization.dart \
 		--no-synthetic-package --no-nullable-getter --format --no-suppress-warnings --output-class $(classname) \
 		--required-resource-attributes --untranslated-messages-file=lib/features/$(feature)/l10n/$(feature)_l10n_untranslated.txt
-
+ifneq ($(ci), yes)
 	git add **/$(feature)_localization*.dart
+endif
 
 l10n-gen:
 	make l10n feature=core classname=CoreLocalizations

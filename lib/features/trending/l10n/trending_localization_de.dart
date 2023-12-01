@@ -15,4 +15,12 @@ class TrendingLocalizationsDe extends TrendingLocalizations {
 
   @override
   String get reloadActionText => 'Erneut versuchen';
+
+  @override
+  String get trendingDatasourceApiException =>
+      'Es ist ein Fehler beim Abrufen der Daten aus der TMDB aufgetreten.';
+
+  @override
+  String get trendingDatasourceResponseMappingException =>
+      'Es ist ein Fehler beim verarbeiten der TMDB Antwort aufgetreten.';
 }

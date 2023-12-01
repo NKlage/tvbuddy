@@ -1,6 +1,10 @@
+import 'dart:ui';
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/shared.dart' show CoreProviders, TvBuddyRouteConfiguration;
+import '../../core/shared.dart'
+    show CoreProviders, LocaleObserver, TvBuddyRouteConfiguration;
 import '../application.dart' show TrendingService;
 import '../data.dart'
     show TrendingDatasource, TrendingRemoteDatasource, TrendingRepositoryImpl;
@@ -21,6 +25,7 @@ class TrendingProviders {
   static Provider<TrendingDatasource> trendingRemoteDatasource = Provider(
     (ref) => TrendingRemoteDatasource(
       tmdbClient: ref.read(CoreProviders.tmdbClient),
+      trendingLocalizations: ref.read(trendingLocalizationsProvider),
     ),
   );
 
@@ -62,6 +67,23 @@ class TrendingProviders {
   });
 
   // Shared
+
+  /// provider used to access the [TrendingLocalizations] object for the current
+  /// locale
+  static final Provider<TrendingLocalizations> trendingLocalizationsProvider =
+      Provider<TrendingLocalizations>(
+    (ref) {
+      final locale = PlatformDispatcher.instance.locale;
+      ref.state = lookupTrendingLocalizations(locale);
+      final observer = LocaleObserver((locales) {
+        ref.state = lookupTrendingLocalizations(locale);
+      });
+      final binding = WidgetsBinding.instance..addObserver(observer);
+      ref.onDispose(() => binding.removeObserver(observer));
+      return ref.state;
+    },
+  );
+
   /// Trending Feature Route Configuration
   static final Provider<TvBuddyRouteConfiguration> routeConfiguration =
       Provider((ref) => TrendingRoute());

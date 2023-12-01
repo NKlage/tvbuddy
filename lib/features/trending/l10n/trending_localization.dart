@@ -120,6 +120,18 @@ abstract class TrendingLocalizations {
   /// In de, this message translates to:
   /// **'Erneut versuchen'**
   String get reloadActionText;
+
+  /// Fehlermeldung wenn der TMDB API Call einen Fehler verursacht hat.
+  ///
+  /// In de, this message translates to:
+  /// **'Es ist ein Fehler beim Abrufen der Daten aus der TMDB aufgetreten.'**
+  String get trendingDatasourceApiException;
+
+  /// Fehlermeldung wenn die TMDB Antwort nicht korrekt verarbeitet werden konnte.
+  ///
+  /// In de, this message translates to:
+  /// **'Es ist ein Fehler beim verarbeiten der TMDB Antwort aufgetreten.'**
+  String get trendingDatasourceResponseMappingException;
 }
 
 class _TrendingLocalizationsDelegate
