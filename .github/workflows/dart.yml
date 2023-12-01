@@ -30,11 +30,8 @@ jobs:
           channel: 'stable'
           cache: false
 
-      - name: flutter doctor
-        run: flutter doctor -v
-
       - name: Install dependencies
-        run: flutter pub get
+        run: make clean
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       # - name: Verify formatting
