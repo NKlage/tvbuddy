@@ -18,7 +18,7 @@ class CoreProviders {
   static final Provider<TMDB> tmdbClient = Provider((ref) {
     final config = ref.read(configuration);
     final dio = Dio(
-      BaseOptions(receiveDataWhenStatusError: true),
+      BaseOptions(receiveDataWhenStatusError: false),
     );
     // ..interceptors.add(
     //     LoggyDioInterceptor(
