@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/NKlage/tvbuddy/badge.svg)](https://coveralls.io/github/NKlage/tvbuddy)
+[![Coverage Status](https://coveralls.io/repos/github/NKlage/tvbuddy/badge.svg?branch=dev)](https://coveralls.io/github/NKlage/tvbuddy?branch=dev)
 # TV Buddy App
 
 
