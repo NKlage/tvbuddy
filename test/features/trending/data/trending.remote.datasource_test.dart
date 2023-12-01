@@ -143,7 +143,8 @@ void main() {
           (p0) =>
               p0 is ApplicationException &&
               p0.message ==
-                  'type \'Null\' is not a subtype of type \'String\' in type cast' &&
+                  "type 'Null' is not a subtype of type 'String' in type "
+                      'cast' &&
               p0.description ==
                   'An error occurred while processing the TMDB response.' &&
               p0.isFatal == true,
